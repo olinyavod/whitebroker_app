@@ -1,0 +1,78 @@
+# .NET MAUI specific
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.cache
+*.csproj.user
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa]rm/
+[Aa]rm64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+
+# MAUI
+AppPackages/
+BundleArtifacts/
+*.appx
+*.appxbundle
+*.appxupload
+*.msix
+*.msixbundle
+*.msixupload
+
+# Android
+*.apk
+*.aab
+*.dex
+*.ap_
+*.class
+local.properties
+
+# iOS
+*.ipa
+*.dSYM.zip
+*.dSYM
+xcuserdata/
+*.xcworkspace
+!default.xcworkspace
+DerivedData/
+
+# Windows
+*.appx
+*.msix
+AppPackages/
+
+# Dependencies
+packages/
+nuget/
+paket-files/
+
+# Build tools
+.paket/
+*.lock.json
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Rider
+.idea/
+*.sln.iml
+.idea_modules/
+

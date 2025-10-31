@@ -34,9 +34,10 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
-  webview_flutter: ^4.4.2
-  flutter_native_splash: ^2.3.5
-  shared_preferences: ^2.2.2
+  webview_flutter: ^4.13.0
+  webview_flutter_android: ^4.10.1
+  shared_preferences: ^2.5.3
+  permission_handler: ^11.3.1
 
 dev_dependencies:
   flutter_test:
@@ -47,8 +48,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^5.0.0
-  flutter_launcher_icons: ^0.13.1
+  flutter_lints: ^6.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -64,37 +64,6 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
-
-# Конфигурация для splash screen
-flutter_native_splash:
-  # Цвет фона для светлой темы (RGB: 24, 50, 74)
-  color: "#18324A"
-  
-  # Цвет фона для темной темы (RGB: 24, 50, 74)
-  color_dark: "#18324A"
-  
-  # Изображение для splash screen
-  image: assets/splash_icon.png
-  
-  # Платформы
-  android: true
-  ios: true
-  web: false
-  
-  # Полноэкранный режим
-  fullscreen: true
-  
-  # Позиционирование изображения
-  android_gravity: center
-  ios_content_mode: center
-  
-  # Специальные настройки для Android 12+
-  android_12:
-    color: "#18324A"
-    color_dark: "#18324A"
-    icon_background_color: "#18324A"
-    icon_background_color_dark: "#18324A"
-    image: assets/splash_icon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
@@ -122,14 +91,3 @@ flutter_native_splash:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
 
-# Конфигурация иконки запуска приложения
-flutter_launcher_icons:
-  android: true
-  ios: true
-  image_path: "assets/splash_icon.png"
-  min_sdk_android: 21
-  adaptive_icon_background: "#18324A"
-  adaptive_icon_foreground: "assets/splash_icon.png"
-  # Padding для adaptive иконки (можно указать от 0 до 100)
-  # 0 = без padding, 50 = средний padding, 100 = максимальный padding
-  adaptive_icon_padding: 20
