@@ -241,3 +241,8 @@ dotnet build -f net8.0-maccatalyst
 - [Жизненный цикл приложения](https://learn.microsoft.com/dotnet/maui/fundamentals/app-lifecycle)
 - [Навигация](https://learn.microsoft.com/dotnet/maui/fundamentals/navigation/)
 
+
+
+
+
+

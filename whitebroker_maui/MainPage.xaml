@@ -7,7 +7,7 @@
     <Grid>
         <!-- WebView занимает весь экран -->
         <WebView x:Name="webView"
-                 Source="http://89.104.65.16/login"
+                 Source="https://wb.easy-prog.ru"
                  VerticalOptions="FillAndExpand"
                  HorizontalOptions="FillAndExpand" />
 
@@ -47,4 +47,8 @@
     </Grid>
 
 </ContentPage>
+
+
+
+
 
