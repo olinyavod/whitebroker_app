@@ -57,7 +57,7 @@ class _WebViewPageState extends State<WebViewPage> {
   bool _isLoading = true;
   bool _isFirstLoad = true;
   final List<String> _consoleLogs = []; // Для хранения логов JavaScript
-  bool _showConsole = false; // Показывать ли консоль
+с  bool _showConsole = false; // Показывать ли консоль
 
   @override
   void initState() {
@@ -264,7 +264,7 @@ class _WebViewPageState extends State<WebViewPage> {
           },
         ),
       )
-      ..loadRequest(Uri.parse('http://89.104.65.16/login'));
+      ..loadRequest(Uri.parse('https://wb.easy-prog.ru'));
     
     // Включаем поддержку выбора файлов для Android
     if (_controller.platform is AndroidWebViewController) {
