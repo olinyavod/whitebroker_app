@@ -49,6 +49,9 @@ whitebroker_app/android/app/release
 # Android related
 *.jks
 *.keystore
+*.apk
+*.aab
+*.aar
 whitebroker_app/android/local.properties
 whitebroker_app/android/.gradle/
 whitebroker_app/android/captures/
@@ -56,6 +59,23 @@ whitebroker_app/android/.externalNativeBuild/
 whitebroker_app/android/gradle/
 whitebroker_app/android/gradlew
 whitebroker_app/android/gradlew.bat
+
+# .NET MAUI / Xamarin related
+whitebroker_maui/bin/
+whitebroker_maui/obj/
+whitebroker_maui/.vs/
+whitebroker_maui/*.user
+whitebroker_maui/*.suo
+**/bin/
+**/obj/
+**/.vs/
+
+# APK and AAB files (build artifacts)
+*.apk
+*.aab
+*.ipa
+*.msix
+*.appx
 
 # iOS/XCode related
 **/ios/**/*.mode1v3

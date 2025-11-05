@@ -325,5 +325,27 @@ public partial class MainPage : ContentPage
 		public string Message { get; set; } = "";
 		public int Count { get; set; } = 1;
 	}
+#else
+	// ============================================
+	// Заглушки для Release режима
+	// ============================================
+	
+	// Эти методы нужны, чтобы XAML компилировался в Release
+	// но они никогда не будут вызваны, так как кнопки скрыты
+	
+	private void OnToggleConsoleClicked(object? sender, EventArgs e)
+	{
+		// Заглушка - консоль недоступна в Release
+	}
+
+	private void OnClearConsoleClicked(object? sender, EventArgs e)
+	{
+		// Заглушка - консоль недоступна в Release
+	}
+
+	private void OnCopyLogsClicked(object? sender, EventArgs e)
+	{
+		// Заглушка - консоль недоступна в Release
+	}
 #endif
 }
