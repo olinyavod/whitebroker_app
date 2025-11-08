@@ -1,9 +1,19 @@
 using System.Text;
+using WhiteBroker.Services;
+#if ANDROID
+using WhiteBroker.Platforms.Android;
+#elif IOS
+using WhiteBroker.Platforms.iOS;
+#endif
 
 namespace WhiteBroker;
 
 public partial class MainPage : ContentPage
 {
+	private const string TargetDomain = "wb.easy-prog.ru";
+	private readonly CookieManager _cookieManager;
+	private System.Timers.Timer? _cookieSaveTimer;
+
 #if DEBUG
 	private bool isConsoleVisible = false;
 	private List<ConsoleMessage> consoleMessages = new List<ConsoleMessage>();
@@ -12,14 +22,17 @@ public partial class MainPage : ContentPage
 	private Label? lastMessageLabel = null;
 #endif
 
-	public MainPage()
+	public MainPage(CookieManager cookieManager)
 	{
 		InitializeComponent();
+		
+		_cookieManager = cookieManager;
 
 #if DEBUG
 		// Консоль доступна только в Debug режиме
 		consoleToggleButton.IsVisible = true;
 		AddConsoleMessage("info", "[DEBUG MODE] Console debugging enabled");
+		AddConsoleMessage("info", "[Cookie Manager] Initialized");
 #else
 		// В Release режиме скрываем кнопку консоли
 		consoleToggleButton.IsVisible = false;
@@ -29,6 +42,47 @@ public partial class MainPage : ContentPage
 		// Подписываемся на события WebView один раз
 		webView.Navigating += OnWebViewNavigating;
 		webView.Navigated += OnNavigated;
+
+		// Настраиваем таймер для периодического сохранения куков (каждые 30 секунд)
+		_cookieSaveTimer = new System.Timers.Timer(30000); // 30 секунд
+		_cookieSaveTimer.Elapsed += async (sender, e) => await SaveCookiesAsync();
+		_cookieSaveTimer.Start();
+	}
+
+	protected override void OnDisappearing()
+	{
+		base.OnDisappearing();
+		
+		// Сохраняем куки при закрытии страницы
+		_ = SaveCookiesAsync();
+		
+		// Останавливаем таймер
+		_cookieSaveTimer?.Stop();
+	}
+
+	/// <summary>
+	/// Сохраняет текущие куки
+	/// </summary>
+	private async Task SaveCookiesAsync()
+	{
+		try
+		{
+#if ANDROID
+			await CustomWebViewHandler.SaveCurrentCookiesAsync(TargetDomain);
+#elif IOS
+			await CustomWebViewHandler.SaveCurrentCookiesAsync(TargetDomain);
+#endif
+
+#if DEBUG
+			AddConsoleMessage("info", "[Cookie Manager] Куки сохранены");
+#endif
+		}
+		catch (Exception ex)
+		{
+#if DEBUG
+			AddConsoleMessage("error", $"[Cookie Manager] Ошибка при сохранении куков: {ex.Message}");
+#endif
+		}
 	}
 
 	// Объединённый обработчик навигации
@@ -68,6 +122,8 @@ public partial class MainPage : ContentPage
 			await Task.Delay(500); // Даём странице время для инициализации
 			await InjectConsoleCapture();
 #endif
+			// Сохраняем куки после успешной навигации
+			_ = SaveCookiesAsync();
 		}
 	}
 

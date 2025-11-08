@@ -1,12 +1,14 @@
+using WhiteBroker.Services;
+
 namespace WhiteBroker;
 
 public partial class App : Application
 {
-	public App()
+	public App(CookieManager cookieManager)
 	{
 		InitializeComponent();
 
-		MainPage = new MainPage();
+		MainPage = new MainPage(cookieManager);
 	}
 }
 

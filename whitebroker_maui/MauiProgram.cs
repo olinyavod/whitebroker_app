@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using WhiteBroker.Services;
 
 #if ANDROID
 using WhiteBroker.Platforms.Android;
@@ -31,11 +32,24 @@ public static class MauiProgram
 #endif
 			});
 
+		// Регистрируем CookieManager как singleton
+		builder.Services.AddSingleton<CookieManager>();
+
 #if DEBUG
 		builder.Logging.AddDebug();
 #endif
 
-		return builder.Build();
+		var app = builder.Build();
+
+		// Инициализируем CookieManager в обработчиках WebView
+		var cookieManager = app.Services.GetRequiredService<CookieManager>();
+#if ANDROID
+		CustomWebViewHandler.SetCookieManager(cookieManager);
+#elif IOS
+		CustomWebViewHandler.SetCookieManager(cookieManager);
+#endif
+
+		return app;
 	}
 }
 
