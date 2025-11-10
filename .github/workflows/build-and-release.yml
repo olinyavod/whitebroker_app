@@ -202,8 +202,8 @@ jobs:
       run: |
         $body = @{
           chat_id = "${{ vars.TELEGRAM_CHAT_ID }}"
-          text = "✅ *WhiteBroker v${{ needs.get-version.outputs.version }} успешно собран!*`n`n📱 *Собранные файлы:*`n• Release APK (подписанный) - для распространения`n• Release AAB (подписанный) - для публикации в Google Play`n`n🔗 *Релиз:* https://github.com/${{ github.repository }}/releases/tag/${{ needs.get-version.outputs.tag_name }}"
-          parse_mode = "Markdown"
+          text = "✅ <b>WhiteBroker v${{ needs.get-version.outputs.version }} успешно собран!</b>`n`n📱 <b>Собранные файлы:</b>`n• Release APK (подписанный) - для распространения`n• Release AAB (подписанный) - для публикации в Google Play`n`n🔗 <b>Релиз:</b> https://github.com/${{ github.repository }}/releases/tag/${{ needs.get-version.outputs.tag_name }}"
+          parse_mode = "HTML"
         } | ConvertTo-Json
         
         Invoke-RestMethod -Uri "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" -Method Post -Body $body -ContentType "application/json"
@@ -225,8 +225,8 @@ jobs:
         
         $body = @{
           chat_id = "${{ vars.TELEGRAM_CHAT_ID }}"
-          text = "❌ *Ошибка сборки WhiteBroker v${{ needs.get-version.outputs.version }}*`n`n🚫 *Неудачные задачи:*`n$FAILED_JOBS`n🔗 *Логи сборки:* https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          parse_mode = "Markdown"
+          text = "❌ <b>Ошибка сборки WhiteBroker v${{ needs.get-version.outputs.version }}</b>`n`n🚫 <b>Неудачные задачи:</b>`n$FAILED_JOBS`n🔗 <b>Логи сборки:</b> https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          parse_mode = "HTML"
         } | ConvertTo-Json
         
         Invoke-RestMethod -Uri "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" -Method Post -Body $body -ContentType "application/json"
