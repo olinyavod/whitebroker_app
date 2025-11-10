@@ -1,0 +1,233 @@
+name: Build and Release WhiteBroker
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Версия релиза (например: 1.0.0)'
+        required: true
+        type: string
+
+env:
+  DOTNET_VERSION: '9.0.x'
+  ANDROID_SDK_VERSION: '34'
+  JAVA_VERSION: '17'
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  check-commit:
+    name: Check Commit Message
+    runs-on: ubuntu-latest
+    outputs:
+      should_build: ${{ steps.check.outputs.should_build }}
+    steps:
+    - name: Check if should build
+      id: check
+      run: |
+        if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+          echo "should_build=true" >> $GITHUB_OUTPUT
+          echo "✅ Manual trigger - will build"
+        elif [[ "${{ github.event.head_commit.message }}" == "#Release"* ]]; then
+          echo "should_build=true" >> $GITHUB_OUTPUT
+          echo "✅ Commit message starts with #Release - will build"
+        else
+          echo "should_build=false" >> $GITHUB_OUTPUT
+          echo "⏭️ Commit message does NOT start with #Release - skipping build"
+        fi
+
+  get-version:
+    name: Get Version
+    runs-on: windows-latest
+    needs: check-commit
+    if: needs.check-commit.outputs.should_build == 'true'
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
+      tag_name: ${{ steps.get_version.outputs.tag_name }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Get version
+      id: get_version
+      shell: pwsh
+      run: |
+        if ("${{ github.event_name }}" -eq "workflow_dispatch") {
+          $VERSION = "${{ github.event.inputs.version }}"
+        } else {
+          # Получаем версию из файла проекта WhiteBroker.csproj
+          $content = Get-Content "whitebroker_maui/WhiteBroker.csproj"
+          $match = $content | Select-String '<ApplicationDisplayVersion>([^<]+)</ApplicationDisplayVersion>'
+          $VERSION = $match.Matches[0].Groups[1].Value
+        }
+        Write-Output "version=$VERSION" >> $env:GITHUB_OUTPUT
+        Write-Output "tag_name=v$VERSION" >> $env:GITHUB_OUTPUT
+
+  build-maui-android:
+    name: Build MAUI Android
+    runs-on: windows-latest
+    needs: get-version
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: ${{ env.JAVA_VERSION }}
+
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+      with:
+        api-level: ${{ env.ANDROID_SDK_VERSION }}
+
+    - name: Restore .NET workloads
+      run: dotnet workload restore
+      working-directory: whitebroker_maui
+
+    - name: Restore dependencies
+      run: dotnet restore WhiteBroker.csproj
+      working-directory: whitebroker_maui
+
+    - name: Build Android Release
+      run: |
+        dotnet build WhiteBroker.csproj -f net9.0-android -c Release --no-restore
+      working-directory: whitebroker_maui
+
+    - name: Publish Android Release APK
+      run: |
+        dotnet publish WhiteBroker.csproj -f net9.0-android -c Release -p:AndroidPackageFormat=apk -o ../artifacts/android-release
+      working-directory: whitebroker_maui
+
+    - name: Rename Release APK files
+      shell: pwsh
+      run: |
+        Write-Output "Renaming Release APK files..."
+        
+        # Удаляем неподписанные APK файлы
+        Get-ChildItem -Path ./artifacts/android-release -Filter *.apk | Where-Object { $_.Name -notlike '*-Signed.apk' } | ForEach-Object {
+          Write-Output "Removing unsigned APK: $($_.Name)"
+          Remove-Item -Path $_.FullName -Force
+        }
+        
+        # Переименовываем подписанные APK файлы
+        Get-ChildItem -Path ./artifacts/android-release -Filter *-Signed.apk | ForEach-Object {
+          $oldName = $_.Name
+          $newName = "WhiteBroker-v${{ needs.get-version.outputs.version }}-Release.apk"
+          Rename-Item -Path $_.FullName -NewName $newName
+          Write-Output "Renamed: $oldName -> $newName"
+        }
+
+    - name: List Release APK files
+      shell: pwsh
+      run: |
+        Write-Output "Release APK files:"
+        Get-ChildItem -Path ./artifacts/android-release -Filter *.apk | ForEach-Object { Write-Output $_.Name }
+
+    - name: Publish Android Release AAB
+      run: |
+        dotnet publish WhiteBroker.csproj -f net9.0-android -c Release -p:AndroidPackageFormat=aab -o ../artifacts/android-release-aab
+      working-directory: whitebroker_maui
+
+    - name: Rename Release AAB files
+      shell: pwsh
+      run: |
+        Write-Output "Renaming Release AAB files..."
+        
+        # Удаляем неподписанные AAB файлы
+        Get-ChildItem -Path ./artifacts/android-release-aab -Filter *.aab | Where-Object { $_.Name -notlike '*-Signed.aab' } | ForEach-Object {
+          Write-Output "Removing unsigned AAB: $($_.Name)"
+          Remove-Item -Path $_.FullName -Force
+        }
+        
+        # Переименовываем подписанные AAB файлы
+        Get-ChildItem -Path ./artifacts/android-release-aab -Filter *-Signed.aab | ForEach-Object {
+          $oldName = $_.Name
+          $newName = "WhiteBroker-v${{ needs.get-version.outputs.version }}-Release.aab"
+          Rename-Item -Path $_.FullName -NewName $newName
+          Write-Output "Renamed: $oldName -> $newName"
+        }
+
+    - name: List Release AAB files
+      shell: pwsh
+      run: |
+        Write-Output "Release AAB files:"
+        Get-ChildItem -Path ./artifacts/android-release-aab -Filter *.aab | ForEach-Object { Write-Output $_.Name }
+    
+    - name: Create GitHub Release and upload assets
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ needs.get-version.outputs.tag_name }}
+        name: WhiteBroker v${{ needs.get-version.outputs.version }}
+        body: |
+          ## WhiteBroker v${{ needs.get-version.outputs.version }}
+          
+          ### Сборки
+          - **Release APK** (подписанный) - для распространения и установки
+          - **Release AAB** (подписанный) - для публикации в Google Play
+          
+          ### Изменения
+          - Обновления и улучшения
+          - Исправления ошибок
+        draft: false
+        prerelease: false
+        files: |
+          ./artifacts/android-release/*.apk
+          ./artifacts/android-release-aab/*.aab
+        generate_release_notes: true
+        make_latest: true
+
+  notify-telegram-success:
+    name: Notify Telegram Success
+    runs-on: windows-latest
+    needs: [get-version, build-maui-android]
+    if: always() && needs.build-maui-android.result == 'success'
+    
+    steps:
+    - name: Send Telegram Success Notification
+      shell: pwsh
+      run: |
+        $body = @{
+          chat_id = "${{ vars.TELEGRAM_CHAT_ID }}"
+          text = "✅ *WhiteBroker v${{ needs.get-version.outputs.version }} успешно собран!*`n`n📱 *Собранные файлы:*`n• Release APK (подписанный) - для распространения`n• Release AAB (подписанный) - для публикации в Google Play`n`n🔗 *Релиз:* https://github.com/${{ github.repository }}/releases/tag/${{ needs.get-version.outputs.tag_name }}"
+          parse_mode = "Markdown"
+        } | ConvertTo-Json
+        
+        Invoke-RestMethod -Uri "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" -Method Post -Body $body -ContentType "application/json"
+
+  notify-telegram-failure:
+    name: Notify Telegram Failure
+    runs-on: windows-latest
+    needs: [get-version, build-maui-android]
+    if: always() && needs.build-maui-android.result == 'failure'
+    
+    steps:
+    - name: Send Telegram Failure Notification
+      shell: pwsh
+      run: |
+        $FAILED_JOBS = ""
+        if ("${{ needs.build-maui-android.result }}" -eq "failure") {
+          $FAILED_JOBS += "• MAUI Android сборка`n"
+        }
+        
+        $body = @{
+          chat_id = "${{ vars.TELEGRAM_CHAT_ID }}"
+          text = "❌ *Ошибка сборки WhiteBroker v${{ needs.get-version.outputs.version }}*`n`n🚫 *Неудачные задачи:*`n$FAILED_JOBS`n🔗 *Логи сборки:* https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          parse_mode = "Markdown"
+        } | ConvertTo-Json
+        
+        Invoke-RestMethod -Uri "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" -Method Post -Body $body -ContentType "application/json"
+
