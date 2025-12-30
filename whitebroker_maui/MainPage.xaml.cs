@@ -284,11 +284,11 @@ public partial class MainPage : ContentPage
 			await Clipboard.SetTextAsync(logText.ToString());
 			
 			// Показываем уведомление
-			await DisplayAlert("Готово", $"Логи скопированы в буфер обмена ({consoleMessages.Count} сообщений)", "OK");
+			await DisplayAlertAsync("Готово", $"Логи скопированы в буфер обмена ({consoleMessages.Count} сообщений)", "OK");
 		}
 		catch (Exception ex)
 		{
-			await DisplayAlert("Ошибка", $"Не удалось скопировать логи: {ex.Message}", "OK");
+			await DisplayAlertAsync("Ошибка", $"Не удалось скопировать логи: {ex.Message}", "OK");
 		}
 	}
 
@@ -344,7 +344,7 @@ public partial class MainPage : ContentPage
 				});
 
 				// Автоматическая прокрутка вниз
-				Device.BeginInvokeOnMainThread(async () =>
+				Dispatcher.Dispatch(async () =>
 				{
 					await Task.Delay(100);
 					await consoleScrollView.ScrollToAsync(0, consoleContent.Height, false);
