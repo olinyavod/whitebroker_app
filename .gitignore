@@ -137,3 +137,4 @@ coverage/
 # JDK
 whitebroker_ionic/jdk-*/
 
+/.claude
