@@ -14,7 +14,7 @@
         <!-- WebView -->
         <WebView x:Name="webView"
                  Grid.Row="0"
-                 Source="http://83.166.246.124"
+                 Source="https://my.whitebrokerdv.ru"
                  VerticalOptions="FillAndExpand"
                  HorizontalOptions="FillAndExpand" />
 
