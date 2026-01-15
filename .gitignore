@@ -138,3 +138,6 @@ coverage/
 whitebroker_ionic/jdk-*/
 
 /.claude
+
+# Allow specific keystore for MAUI signing
+!whitebroker_maui/Technoupr.keystore
