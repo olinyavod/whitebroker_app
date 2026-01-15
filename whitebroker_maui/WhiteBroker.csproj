@@ -40,6 +40,26 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
+	<!-- Android Signing Configuration - Debug -->
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-android|AnyCPU'">
+		<AndroidKeyStore>True</AndroidKeyStore>
+		<AndroidSigningKeyStore>Technoupr.keystore</AndroidSigningKeyStore>
+		<AndroidSigningKeyAlias>new_line_promo</AndroidSigningKeyAlias>
+		<AndroidSigningStorePass>BTZKb8G5ISTgD4e1nvJk</AndroidSigningStorePass>
+		<AndroidSigningKeyPass>BTZKb8G5ISTgD4e1nvJk</AndroidSigningKeyPass>
+		<AndroidPackageFormat>apk</AndroidPackageFormat>
+	</PropertyGroup>
+
+	<!-- Android Signing Configuration - Release -->
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-android|AnyCPU'">
+		<AndroidKeyStore>True</AndroidKeyStore>
+		<AndroidSigningKeyStore>Technoupr.keystore</AndroidSigningKeyStore>
+		<AndroidSigningKeyAlias>new_line_promo</AndroidSigningKeyAlias>
+		<AndroidSigningStorePass>BTZKb8G5ISTgD4e1nvJk</AndroidSigningStorePass>
+		<AndroidSigningKeyPass>BTZKb8G5ISTgD4e1nvJk</AndroidSigningKeyPass>
+		<AndroidPackageFormat>aab</AndroidPackageFormat>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" Color="#193352" />
