@@ -141,3 +141,4 @@ whitebroker_ionic/jdk-*/
 
 # Allow specific keystore for MAUI signing
 !whitebroker_maui/Technoupr.keystore
+/whitebroker_maui/.claude
