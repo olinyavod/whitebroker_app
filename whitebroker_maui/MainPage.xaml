@@ -11,10 +11,11 @@
             <RowDefinition x:Name="consoleRow" Height="0" />
         </Grid.RowDefinitions>
 
-        <!-- WebView -->
+        <!-- WebView (изначально скрыт, показывается после успешной загрузки) -->
         <WebView x:Name="webView"
                  Grid.Row="0"
                  Source="https://my.whitebrokerdv.ru"
+                 IsVisible="False"
                  VerticalOptions="FillAndExpand"
                  HorizontalOptions="FillAndExpand" />
 
