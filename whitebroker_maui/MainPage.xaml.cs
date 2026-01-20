@@ -117,6 +117,8 @@ public partial class MainPage : ContentPage
 		}
 		else
 		{
+			// Показываем WebView только после успешной загрузки
+			webView.IsVisible = true;
 #if DEBUG
 			// Инжектируем скрипт после загрузки страницы (только в Debug)
 			await Task.Delay(500); // Даём странице время для инициализации
@@ -140,7 +142,10 @@ public partial class MainPage : ContentPage
 	private void OnRefreshClicked(object? sender, EventArgs e)
 	{
 		errorLayout.IsVisible = false;
-		webView.IsVisible = true;
+		// Показываем индикатор загрузки сразу
+		loadingIndicator.IsVisible = true;
+		loadingIndicator.IsRunning = true;
+		// WebView остаётся скрытым до успешной загрузки
 		webView.Reload();
 	}
 
