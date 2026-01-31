@@ -34,7 +34,7 @@
 ## Где хранятся куки
 
 Куки сохраняются локально на вашем устройстве в защищенной папке приложения:
-- **Android**: `/data/data/com.whitebroker.app/files/cookies.json`
+- **Android**: `/data/data/ru.easyprrog.whitebroker/files/cookies.json`
 - **iOS**: `Library/Application Support/cookies.json`
 
 ## Безопасность

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WhiteBroker.MainPageiOS"
+             Shell.NavBarIsVisible="False">
+
+    <Grid>
+        <WebView x:Name="webView"
+                 Source="https://my.whitebrokerdv.ru"
+                 VerticalOptions="FillAndExpand"
+                 HorizontalOptions="FillAndExpand" />
+
+        <!-- Сообщение об ошибке -->
+        <Grid x:Name="errorLayout"
+              IsVisible="False"
+              BackgroundColor="{AppThemeBinding Light=White, Dark=#1C1C1E}">
+            <StackLayout VerticalOptions="Center"
+                         HorizontalOptions="Center"
+                         Padding="30">
+                <Label Text="⚠️"
+                       FontSize="60"
+                       HorizontalOptions="Center" />
+                <Label x:Name="errorLabel"
+                       Text="Ошибка соединения"
+                       TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                       FontSize="18"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center"
+                       Margin="0,20,0,20" />
+                <Button Text="Обновить"
+                        Clicked="OnRefreshClicked"
+                        HorizontalOptions="Center"
+                        BackgroundColor="#512BD4"
+                        TextColor="White"
+                        CornerRadius="10"
+                        Padding="30,10" />
+            </StackLayout>
+        </Grid>
+    </Grid>
+
+</ContentPage>

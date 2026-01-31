@@ -19,13 +19,15 @@
 - Android SDK (API 21-34)
 - Java JDK 17+
 
+**Примечание:** Идентификатор пакета задаётся в `WhiteBroker.csproj` через `<ApplicationId>` (используется для Android и iOS). Для переопределения только платформы используйте атрибут `package` в `AndroidManifest.xml` или `CFBundleIdentifier` в `Info.plist`.
+
 ### Сборка Debug APK
 
 ```bash
 dotnet build -f net8.0-android -c Debug
 ```
 
-**Результат:** `bin/Debug/net8.0-android/com.whitebroker.app-Signed.apk`
+**Результат:** `bin/Debug/net8.0-android/ru.easyprrog.whitebroker-Signed.apk`
 
 ### Сборка Release APK
 
@@ -33,7 +35,7 @@ dotnet build -f net8.0-android -c Debug
 dotnet publish -f net8.0-android -c Release
 ```
 
-**Результат:** `bin/Release/net8.0-android/publish/com.whitebroker.app-Signed.apk`
+**Результат:** `bin/Release/net8.0-android/publish/ru.easyprrog.whitebroker-Signed.apk`
 
 ### Сборка Android App Bundle (AAB)
 
@@ -41,7 +43,7 @@ dotnet publish -f net8.0-android -c Release
 dotnet publish -f net8.0-android -c Release -p:AndroidPackageFormat=aab
 ```
 
-**Результат:** `bin/Release/net8.0-android/publish/com.whitebroker.app-Signed.aab`
+**Результат:** `bin/Release/net8.0-android/publish/ru.easyprrog.whitebroker-Signed.aab`
 
 **Примечание:** AAB файлы требуются для публикации в Google Play Store.
 
@@ -93,7 +95,7 @@ dotnet publish -f net8.0-android -c Release \
 ### Установка на устройство
 
 ```bash
-adb install bin/Release/net8.0-android/publish/com.whitebroker.app-Signed.apk
+adb install bin/Release/net8.0-android/publish/ru.easyprrog.whitebroker-Signed.apk
 ```
 
 ---
@@ -104,6 +106,8 @@ adb install bin/Release/net8.0-android/publish/com.whitebroker.app-Signed.apk
 - macOS с Xcode 15+
 - .NET 8.0 SDK
 - Apple Developer аккаунт (для установки на устройства)
+
+**Примечание:** Идентификатор пакета берётся из `WhiteBroker.csproj` (`<ApplicationId>`). Для локального переопределения используйте `CFBundleIdentifier` в `Info.plist`.
 
 ### Сборка для симулятора
 
