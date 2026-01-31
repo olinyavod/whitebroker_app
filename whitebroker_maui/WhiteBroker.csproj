@@ -25,7 +25,7 @@
 		<ApplicationTitle>White Broker</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.whitebroker.app</ApplicationId>
+		<ApplicationId>ru.easyprrog.whitebroker</ApplicationId>
 
 	
 		<!-- Versions -->
@@ -58,6 +58,11 @@
 		<AndroidSigningStorePass>BTZKb8G5ISTgD4e1nvJk</AndroidSigningStorePass>
 		<AndroidSigningKeyPass>BTZKb8G5ISTgD4e1nvJk</AndroidSigningKeyPass>
 		<AndroidPackageFormat>aab</AndroidPackageFormat>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(TargetFramework)'=='net10.0-ios'">
+	  <ProvisioningType>manual</ProvisioningType>
+	  <CodesignKey>iPhone Developer</CodesignKey>
+	  <CodesignProvision></CodesignProvision>
 	</PropertyGroup>
 
 	<ItemGroup>

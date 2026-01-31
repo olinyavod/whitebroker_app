@@ -14,7 +14,11 @@ public partial class App : Application
 
 	protected override Window CreateWindow(IActivationState? activationState)
 	{
+#if IOS
+		return new Window(new MainPageiOS());
+#else
 		return new Window(new MainPage(_cookieManager));
+#endif
 	}
 }
 

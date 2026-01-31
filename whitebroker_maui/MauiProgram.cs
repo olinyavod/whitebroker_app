@@ -26,9 +26,6 @@ public static class MauiProgram
 #if ANDROID
 				// Регистрируем кастомный обработчик WebView для Android
 				handlers.AddHandler(typeof(WebView), typeof(CustomWebViewHandler));
-#elif IOS
-				// Регистрируем кастомный обработчик WebView для iOS
-				handlers.AddHandler(typeof(WebView), typeof(CustomWebViewHandler));
 #endif
 			});
 

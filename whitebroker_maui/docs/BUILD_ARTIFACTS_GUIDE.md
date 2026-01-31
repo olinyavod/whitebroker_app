@@ -195,7 +195,7 @@ dotnet build -c Release -f net9.0-android
 
 3. **APK будет здесь**:
 ```
-bin/Release/net9.0-android/com.whitebroker.app-Signed.apk
+bin/Release/net9.0-android/ru.easyprrog.whitebroker-Signed.apk
 ```
 
 4. **НЕ коммитить APK**:
