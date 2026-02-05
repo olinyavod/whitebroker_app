@@ -34,7 +34,7 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Приложению требуется доступ к камере для загрузки фотографий</string>
+	<string>Камера используется для съёмки документов и фотографий объектов недвижимости при создании объявлений</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Приложению требуется доступ к фотографиям для загрузки файлов</string>
 </dict>
