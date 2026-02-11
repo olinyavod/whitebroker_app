@@ -33,10 +33,17 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>ru</string>
+	</array>
 	<key>NSCameraUsageDescription</key>
-	<string>Камера используется для съёмки документов и фотографий объектов недвижимости при создании объявлений</string>
+	<string>This app needs camera access to photograph vehicles and customs documentation for international vehicle transportation. For example, you can capture vehicle photos, VIN numbers, registration certificates, and customs declarations required for cross-border auto transport services.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Приложению требуется доступ к фотографиям для загрузки файлов</string>
+	<string>This app needs access to your photo library to select and upload vehicle photos and customs documents for transportation orders. For example, you can choose existing vehicle images, registration documents, or customs paperwork from your gallery to complete shipping requests.</string>
 </dict>
 </plist>
 
